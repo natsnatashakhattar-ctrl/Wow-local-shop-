@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wow Local Shop</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f5f5f5;
+}
+
+header{
+background:#ff6b00;
+color:white;
+padding:15px;
+text-align:center;
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.hero{
+height:80vh;
+background:url('https://i.ibb.co/HDBN8vB6/IMG20260615161036.jpg') center/cover;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+color:white;
+position:relative;
+}
+
+.hero::before{
+content:'';
+position:absolute;
+inset:0;
+background:rgba(0,0,0,.55);
+}
+
+.hero-content{
+position:relative;
+z-index:2;
+padding:20px;
+}
+
+.hero h1{
+font-size:3rem;
+margin-bottom:10px;
+}
+
+.hero p{
+margin-bottom:20px;
+font-size:1.1rem;
+}
+
+.btn{
+background:#ff6b00;
+color:white;
+padding:12px 25px;
+border-radius:30px;
+text-decoration:none;
+}
+
+.products{
+padding:50px 20px;
+}
+
+.products h2{
+text-align:center;
+margin-bottom:30px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+
+.card img{
+width:100%;
+height:250px;
+object-fit:cover;
+}
+
+.card-content{
+padding:15px;
+}
+
+.price{
+font-weight:bold;
+color:#ff6b00;
+margin:10px 0;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+background:#28a745;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
+
+.cart{
+background:white;
+margin:20px;
+padding:20px;
+border-radius:15px;
+}
+
+.cart-item{
+padding:8px 0;
+border-bottom:1px solid #eee;
+}
+
+.order{
+padding:30px 20px;
+}
+
+form{
+max-width:700px;
+margin:auto;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+input,textarea{
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+}
+
+.submit{
+background:#ff6b00;
+}
+
+footer{
+background:#111;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:40px;
+}
+
+.whatsapp{
+position:fixed;
+right:20px;
+bottom:20px;
+background:#25D366;
+color:white;
+width:60px;
+height:60px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:50%;
+font-size:28px;
+text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>Wow Local Shop</h2>
+<p>Fresh Finds • Authentic Antique Pieces • Best Prices</p>
+</header>
+
+<section class="hero">
+<div class="hero-content">
+<h1>Welcome To Wow Local Shop</h1>
+<p>Discover unique products at amazing prices</p>
+<a href="#products" class="btn">Shop Now</a>
+</div>
+</section>
+
+<section id="products" class="products">
+
+<h2>Our Products</h2>
+
+<div class="grid">
+
+<div class="card">
+<img src="https://i.ibb.co/HDBN8vB6/IMG20260615161036.jpg">
+<div class="card-content">
+<h3>Antique Decor Piece</h3>
+<p class="price">₹499</p>
+<button onclick="addToCart('Antique Decor Piece',499)">
+Add To Cart
+</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://i.ibb.co/YBSGmPK4/IMG20260615161300.jpg">
+<div class="card-content">
+<h3>Vintage Collection Item</h3>
+<p class="price">₹699</p>
+<button onclick="addToCart('Vintage Collection Item',699)">
+Add To Cart
+</button>
+</div>
+</div>
+
+</div>
+
+</section>
+
+<div class="cart">
+<h2>Cart</h2>
+<div id="cartItems"></div>
+<h3>Total ₹<span id="total">0</span></h3>
+</div>
+
+<section class="order">
+
+<h2 style="text-align:center;margin-bottom:20px;">
+Place Your Order
+</h2>
+
+<form id="orderForm">
+
+<input type="text" id="name" placeholder="Customer Name" required>
+
+<input type="tel" id="phone" placeholder="Phone Number" required>
+
+<input type="tel" id="altphone" placeholder="Alternative Number">
+
+<textarea id="address" rows="4" placeholder="Address" required></textarea>
+
+<button type="submit" class="submit">
+Place Order
+</button>
+
+</form>
+
+</section>
+
+<footer>
+<p>Wow Local Shop</p>
+<p>Email: elowennats@gmail.com</p>
+</footer>
+
+<a href="https://wa.me/9992356789" class="whatsapp">
+💬
+</a>
+
+<script>
+
+let cart=[];
+
+function addToCart(name,price){
+
+cart.push({name,price});
+renderCart();
+
+}
+
+function renderCart(){
+
+let items=document.getElementById("cartItems");
+let total=document.getElementById("total");
+
+items.innerHTML="";
+
+let sum=0;
+
+cart.forEach(item=>{
+
+sum+=item.price;
+
+items.innerHTML+=`
+<div class="cart-item">
+${item.name} - ₹${item.price}
+</div>
+`;
+
+});
+
+total.innerText=sum;
+
+}
+
+document.getElementById("orderForm")
+.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+if(cart.length===0){
+alert("Cart is empty");
+return;
+}
+
+let name=document.getElementById("name").value;
+let phone=document.getElementById("phone").value;
+let alt=document.getElementById("altphone").value;
+let address=document.getElementById("address").value;
+
+let items=cart.map(i=>i.name).join(", ");
+
+let total=document.getElementById("total").innerText;
+
+let body=
+`Customer Name: ${name}
+
+Phone: ${phone}
+
+Alternative Number: ${alt}
+
+Address:
+${address}
+
+Items:
+${items}
+
+Total: ₹${total}`;
+
+window.location.href=
+`mailto:elowennats@gmail.com?subject=New Order&body=${encodeURIComponent(body)}`;
+
+});
+
+</script>
+
+</body>
+</html>
